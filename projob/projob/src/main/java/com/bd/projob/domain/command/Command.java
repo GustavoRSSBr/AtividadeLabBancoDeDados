@@ -7,14 +7,16 @@ import com.bd.projob.adapter.input.dto.request.RequestProjetoDto;
 import com.bd.projob.adapter.input.dto.response.ResponsePessoaDto;
 import com.bd.projob.adapter.input.dto.response.ResponseProjetoDto;
 import com.bd.projob.config.exception.NegocioException;
+import com.bd.projob.constantes.MensagemErro;
 import com.bd.projob.domain.entities.Candidatura;
 import com.bd.projob.domain.entities.Pessoa;
 import com.bd.projob.domain.entities.Projeto;
 import com.bd.projob.domain.enums.StatusProjeto;
 import com.bd.projob.port.input.ICommand;
 import com.bd.projob.port.output.IRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,17 +29,24 @@ public class Command implements ICommand {
         this.repository = repository;
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Command.class);
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public Pessoa logar(RequestLoginDto requestLoginDto) {
+
+        LOGGER.info("Buscando informações do usuario pelo email");
         Pessoa pessoa = repository.buscarPessoaPeloEmail(requestLoginDto.getEmail());
+
+        LOGGER.info("Verificando se existe o usuario");
         if (pessoa == null) {
-            throw new NegocioException("Usuario não existe!");
+            throw new NegocioException(MensagemErro.USUARIO_NAO_EXISTE.getMensagem());
         }
 
+        LOGGER.info("Verificando credenciais");
         if (!passwordEncoder.matches(pessoa.getSenha(), requestLoginDto.getSenha())) {
-            throw new NegocioException("Senha incorreta!");
+            throw new NegocioException(MensagemErro.SENHA_INCORRETA.getMensagem());
         }
 
         return pessoa;
@@ -45,20 +54,26 @@ public class Command implements ICommand {
 
     @Override
     public void cadastrarPessoa(RequestPessoaDto requestPessoaDto) {
+
+        LOGGER.info("Validando telefone");
         if (requestPessoaDto.getTelefone().length() > 11) {
-            throw new NegocioException("Número de telefone invalido");
+            throw new NegocioException(MensagemErro.TELEFONE_INVALIDO.getMensagem());
         }
 
+        LOGGER.info("Validando email");
         if (!requestPessoaDto.getEmail().contains("@")) {
-            throw new NegocioException("Email inválido");
+            throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
         }
 
+        LOGGER.info("Validando senha");
         if (!(requestPessoaDto.getSenha().length() < 8)) {
-            throw new NegocioException("Senha inválida");
+            throw new NegocioException(MensagemErro.SENHA_INVALIDA.getMensagem());
         }
 
+        LOGGER.info("Criptografando senha");
         requestPessoaDto.setSenha(passwordEncoder.encode(requestPessoaDto.getSenha()));
 
+        LOGGER.info("Persistindo usuario");
         repository.salvarPessoa(Pessoa.builder()
                 .email(requestPessoaDto.getEmail())
                 .senha(requestPessoaDto.getSenha())
@@ -68,22 +83,33 @@ public class Command implements ICommand {
     }
 
     @Override
-    public void atualizarPessoa(RequestPessoaDto requestPessoaDto) {
+    public void atualizarPessoa(RequestPessoaDto requestPessoaDto, Pessoa pessoa) {
+        LOGGER.info("Vericando usuario logado");
+        if (pessoa == null) {
+            throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
+        }
+
+        LOGGER.info("Validando telefone");
         if (requestPessoaDto.getTelefone().length() > 11) {
-            throw new NegocioException("Número de telefone invalido");
+            throw new NegocioException(MensagemErro.TELEFONE_INVALIDO.getMensagem());
         }
 
+        LOGGER.info("Validando email");
         if (!requestPessoaDto.getEmail().contains("@")) {
-            throw new NegocioException("Email inválido");
+            throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
         }
 
+        LOGGER.info("Validando senha");
         if (!(requestPessoaDto.getSenha().length() < 8)) {
-            throw new NegocioException("Senha inválida");
+            throw new NegocioException(MensagemErro.SENHA_INVALIDA.getMensagem());
         }
 
+        LOGGER.info("Criptografando nova senha");
         requestPessoaDto.setSenha(passwordEncoder.encode(requestPessoaDto.getSenha()));
 
+        LOGGER.info("Persistindo usuario atualizado");
         repository.atualizarPessoa(Pessoa.builder()
+                .codUsuario(pessoa.getCodUsuario())
                 .email(requestPessoaDto.getEmail())
                 .senha(requestPessoaDto.getSenha())
                 .nome(requestPessoaDto.getNome())
@@ -93,14 +119,17 @@ public class Command implements ICommand {
 
     @Override
     public void cadastrarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa) {
+        LOGGER.info("Verificando usuario logado");
         if (pessoa == null) {
-            throw new NegocioException("Você precisa estar logado para realizar essa operação!");
+            throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
         }
 
+        LOGGER.info("Validando Remuneracao");
         if (requestProjetoDto.getRemuneracao() <= 0) {
-            throw new NegocioException("O valor não pode ser menor ou igual a 0");
+            throw new NegocioException(MensagemErro.VALOR_MENOR_ZERO.getMensagem());
         }
 
+        LOGGER.info("Construindo projeto");
         Projeto projeto = Projeto.builder()
                 .titulo(requestProjetoDto.getTitulo())
                 .remuneracao(requestProjetoDto.getRemuneracao())
@@ -109,27 +138,33 @@ public class Command implements ICommand {
                 .status_proj(StatusProjeto.ABERTO.getMensagem())
                 .build();
 
+        LOGGER.info("Persistindo Projeto");
         repository.cadastrarProjeto(projeto);
     }
 
     @Override
     public void atualizarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa, Integer idProjeto) {
+        LOGGER.info("Verificando usuario logado");
         if (pessoa == null) {
-            throw new NegocioException("Você precisa estar logado para realizar essa operação!");
+            throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
         }
 
+        LOGGER.info("Verificando existencia do projeto");
         if (!repository.verificarProjetoExiste(idProjeto)) {
-            throw new NegocioException("O projeto não existe");
+            throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
         }
 
+        LOGGER.info("Validando relação do usuario logado com o projeto a ser atualizado");
         if (repository.verificarRelacaoPessoaProjeto(idProjeto, pessoa.getCodUsuario())) {
-            throw new NegocioException("A pessoa logada não tem permissão para acessar esse projeto");
+            throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());
         }
 
+        LOGGER.info("Validando remuneracao do projeto");
         if (requestProjetoDto.getRemuneracao() <= 0) {
-            throw new NegocioException("O valor não pode ser menor ou igual a 0");
+            throw new NegocioException(MensagemErro.VALOR_MENOR_ZERO.getMensagem());
         }
 
+        LOGGER.info("Construindo novo projeto");
         Projeto projeto = Projeto.builder()
                 .codProjeto(idProjeto)
                 .titulo(requestProjetoDto.getTitulo())
@@ -139,88 +174,117 @@ public class Command implements ICommand {
                 .status_proj(StatusProjeto.ABERTO.getMensagem())
                 .build();
 
+        LOGGER.info("Atualizando projeto");
         repository.atualizarProjeto(projeto);
     }
 
     @Override
     public void deletarProjeto(Integer idProjeto, Pessoa pessoa) {
+        LOGGER.info("Validando usuario logado");
         if (pessoa == null) {
-            throw new NegocioException("Você precisa estar logado para realizar essa operação!");
+            throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
         }
 
+        LOGGER.info("Validando relação do usuario logado com o projeto a ser atualizado");
         if (repository.verificarRelacaoPessoaProjeto(idProjeto, pessoa.getCodUsuario())) {
-            throw new NegocioException("A pessoa logada não tem permissão para acessar esse projeto");
+            throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());
         }
 
+        LOGGER.info("Validando se o projeto existe");
         if (!repository.verificarProjetoExiste(idProjeto)) {
-            throw new NegocioException("O projeto não existe");
+            throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
         }
 
+        LOGGER.info("Deletando projeto");
         repository.deletarProjeto(idProjeto);
     }
 
     @Override
     public ResponseProjetoDto buscarProjeto(Integer idProjeto) {
+        LOGGER.info("Buscando informações do projeto");
         ResponseProjetoDto responseProjetoDto = repository.buscarProjetoId(idProjeto);
 
+        LOGGER.info("Validando se o projeto existe");
         if (responseProjetoDto == null) {
-            throw new NegocioException("O projeto não existe");
+            throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
         }
 
+        LOGGER.info("Retornando projeto");
         return responseProjetoDto;
     }
 
     @Override
     public List<ResponsePessoaDto> listarPessoas(Integer idProjeto) {
-        List<ResponsePessoaDto> pessoasCandidatadas = repository.listarPessoasCandidatadas(idProjeto);
 
-        if (pessoasCandidatadas.isEmpty()) {
-            throw new NegocioException("Nenhuma pessoa se canditou a esse projeto ainda!");
+        LOGGER.info("Validando existencia do projeto");
+        if (!repository.verificarProjetoExiste(idProjeto)) {
+            throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
         }
 
+        LOGGER.info("Buscando candidatos do projeto");
+        List<ResponsePessoaDto> pessoasCandidatadas = repository.listarPessoasCandidatadas(idProjeto);
+
+        LOGGER.info("Vericando se existem pessoas no projeto");
+        if (pessoasCandidatadas.isEmpty()) {
+            throw new NegocioException(MensagemErro.SEM_CANDIDATURA.getMensagem());
+        }
+
+        LOGGER.info("Retornando pessoas");
         return pessoasCandidatadas;
     }
 
     @Override
     public void aceitarCandidato(RequestAceiteDto requestPessoaDto, Pessoa pessoa) {
+        LOGGER.info("Vericando se pessoa existe");
         if (pessoa == null) {
-            throw new NegocioException("Você precisa estar logado para realizar essa operação!");
+            throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
         }
 
+        LOGGER.info("Vericando se existe relação da pessoa com o projeto");
         if (repository.verificarRelacaoPessoaProjeto(requestPessoaDto.getIdProjeto(), pessoa.getCodUsuario())) {
-            throw new NegocioException("A pessoa logada não tem permissão para acessar esse projeto");
+            throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());
         }
 
+        LOGGER.info("Buscando informações da pessoa");
         Pessoa pessoaCandidata = repository.buscarPessoaPeloEmail(requestPessoaDto.getEmailPessoa());
+
+        LOGGER.info("Vericando se pessoa existe");
         if (pessoaCandidata == null) {
-            throw new NegocioException("O candidato não existe");
+            throw new NegocioException(MensagemErro.CANDIDATO_INEXISTENTE.getMensagem());
         }
 
+        LOGGER.info("Aceitando candidatura");
         repository.aceitarCandidato(pessoaCandidata.getCodUsuario(), requestPessoaDto.getIdProjeto());
 
     }
 
     @Override
     public List<ResponseProjetoDto> listarProjetos() {
+        LOGGER.info("Buscando projetos");
         List<ResponseProjetoDto> projetos = repository.listarProjetos();
 
+        LOGGER.info("Vericando se os projetos existem");
         if (projetos.isEmpty()) {
-            throw new NegocioException("Não existe projetos cadastrados!");
+            throw new NegocioException(MensagemErro.SEM_PROJETOS.getMensagem());
         }
 
+        LOGGER.info("Retornando projeto");
         return projetos;
     }
 
     @Override
     public void candidatar(Pessoa pessoa, Integer idProjeto) {
+        LOGGER.info("Validando usuario logado");
         if (pessoa == null) {
-            throw new NegocioException("Você precisa estar logado para realizar essa operação!");
+            throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
         }
 
+        LOGGER.info("verificar se o projeto existe");
         if (!repository.verificarProjetoExiste(idProjeto)) {
-            throw new NegocioException("O projeto não existe");
+            throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
         }
 
+        LOGGER.info("persistindo candidatura do usuario");
         repository.candidatar(Candidatura.builder()
                 .codCandidato(pessoa.getCodUsuario())
                 .codProj(idProjeto)

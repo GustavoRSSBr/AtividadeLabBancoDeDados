@@ -15,7 +15,7 @@ public interface ICommand {
 
     void cadastrarPessoa(RequestPessoaDto requestPessoaDto);
 
-    void atualizarPessoa(RequestPessoaDto requestPessoaDto);
+    void atualizarPessoa(RequestPessoaDto requestPessoaDto, Pessoa pessoa);
 
     void cadastrarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa);
 
