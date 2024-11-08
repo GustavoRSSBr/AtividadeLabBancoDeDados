@@ -13,8 +13,8 @@ public enum MensagemErro {
     SEM_PERMISSAO_PROJETO("A pessoa logada não tem permissão para acessar esse projeto"),
     SEM_CANDIDATURA("Nenhuma pessoa se candidatou a esse projeto ainda!"),
     CANDIDATO_INEXISTENTE("O candidato não existe"),
-    SEM_PROJETOS("Não existe projetos cadastrados!")
-    ;
+    SEM_PROJETOS("Não existe projetos cadastrados!"),
+    TELEFONE_INDISPONIVEL("Esse telefone já está cadastrado");
 
     private final String mensagem;
 

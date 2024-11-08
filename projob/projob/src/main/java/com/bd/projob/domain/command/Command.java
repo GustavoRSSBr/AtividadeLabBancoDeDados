@@ -60,6 +60,11 @@ public class Command implements ICommand {
             throw new NegocioException(MensagemErro.TELEFONE_INVALIDO.getMensagem());
         }
 
+        LOGGER.info("Validando se existe o telefone");
+        if (!repository.existeTelefone(requestPessoaDto.getTelefone())) {
+            throw new NegocioException(MensagemErro.TELEFONE_INDISPONIVEL.getMensagem());
+        }
+
         LOGGER.info("Validando email");
         if (!requestPessoaDto.getEmail().contains("@")) {
             throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
@@ -94,6 +99,11 @@ public class Command implements ICommand {
             throw new NegocioException(MensagemErro.TELEFONE_INVALIDO.getMensagem());
         }
 
+        LOGGER.info("Validando se existe o telefone");
+        if (!repository.existeTelefone(requestPessoaDto.getTelefone())) {
+            throw new NegocioException(MensagemErro.TELEFONE_INDISPONIVEL.getMensagem());
+        }
+
         LOGGER.info("Validando email");
         if (!requestPessoaDto.getEmail().contains("@")) {
             throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
@@ -103,6 +113,8 @@ public class Command implements ICommand {
         if (!(requestPessoaDto.getSenha().length() < 8)) {
             throw new NegocioException(MensagemErro.SENHA_INVALIDA.getMensagem());
         }
+
+
 
         LOGGER.info("Criptografando nova senha");
         requestPessoaDto.setSenha(passwordEncoder.encode(requestPessoaDto.getSenha()));
@@ -118,7 +130,7 @@ public class Command implements ICommand {
     }
 
     @Override
-    public void cadastrarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa) {
+    public int cadastrarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa) {
         LOGGER.info("Verificando usuario logado");
         if (pessoa == null) {
             throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
@@ -139,7 +151,7 @@ public class Command implements ICommand {
                 .build();
 
         LOGGER.info("Persistindo Projeto");
-        repository.cadastrarProjeto(projeto);
+        return repository.cadastrarProjeto(projeto);
     }
 
     @Override

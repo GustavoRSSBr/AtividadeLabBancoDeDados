@@ -31,8 +31,9 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void cadastrarProjeto(Projeto projeto) {
+    public int cadastrarProjeto(Projeto projeto) {
 
+        return 0;
     }
 
     @Override
@@ -78,5 +79,10 @@ public class Repository implements IRepository {
     @Override
     public void aceitarCandidato(int codUsuario, Integer idProjeto) {
 
+    }
+
+    @Override
+    public boolean existeTelefone(String telefone) {
+        return false;
     }
 }

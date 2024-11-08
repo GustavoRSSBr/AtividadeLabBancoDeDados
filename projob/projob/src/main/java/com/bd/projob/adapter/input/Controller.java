@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 public class Controller implements IController {
     private Pessoa pessoa;
@@ -77,13 +78,13 @@ public class Controller implements IController {
         LOGGER.info("Início do método cadastrarProjeto");
         long startTime = System.currentTimeMillis();
 
-        command.cadastrarProjeto(requestProjetoDto, pessoa);
+        int idProjeto = command.cadastrarProjeto(requestProjetoDto, pessoa);
 
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_CADASTRADO.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_CADASTRADO.getMensagem()).dado(idProjeto));
     }
 
     @PostMapping("/atualizar-projeto/{idProjeto}")
