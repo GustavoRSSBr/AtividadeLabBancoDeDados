@@ -12,7 +12,7 @@ senha VARCHAR(60)
 
 create table projeto (
 codProjeto int auto_increment primary key,
-titulo VARCHAR(20),
+titulo VARCHAR(50),
 codPatroc int,
 codCandidato int,
 descricao text,
@@ -96,16 +96,21 @@ select exists (
 ) AS existe;
 
 
--- cadastrarProjeto() --> retorna codProjeto
 DELIMITER $$
-CREATE procedure cadastrarProjeto(in titulo_in VARCHAR(20), in codPatroc_in int, descricao_in text, remuneracao_in decimal, status_proj_in VARCHAR(20))
+CREATE PROCEDURE cadastrarProjeto(
+    IN titulo_in VARCHAR(50), 
+    IN codPatroc_in INT, 
+    IN descricao_in TEXT, 
+    IN remuneracao_in DECIMAL, 
+    IN status_proj_in VARCHAR(20),
+    OUT codProjeto_out INT
+)
 BEGIN
-	insert into projeto (titulo, codPatroc, descricao, remuneracao, status_proj) values (titulo_in, codPatroc_in, descricao_in, remuneracao_in, status_proj_in);
-    select codProjeto from projeto 
-    where titulo = titulo_in and codPatroc = codPatroc_in
-    and descricao = descricao_in
-    and remuneracao = remuneracao_in
-    and status_proj = status_proj_in;
-end $$
+    INSERT INTO projeto (titulo, codPatroc, descricao, remuneracao, status_proj) 
+    VALUES (titulo_in, codPatroc_in, descricao_in, remuneracao_in, status_proj_in);
+    
+    SET codProjeto_out = LAST_INSERT_ID();
+END $$
 DELIMITER ;
--- call cadastrarProjeto("não sei", 1, "slaslasla", 500.00, "Aberto");
+
+-- drop procedure cadastrarProjeto;

@@ -15,5 +15,5 @@ public class Projeto {
     private int codPatroc;
     private String descricao;
     private double remuneracao;
-    private String status_proj;
+    private String statusProj;
 }

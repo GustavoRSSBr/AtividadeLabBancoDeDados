@@ -16,7 +16,7 @@ public class GlobalHandlerException {
     @ExceptionHandler(NegocioException.class)
     @ResponseBody
     public ResponseEntity<ErrorResponseDTO> handleNegocioException(NegocioException ex) {
-        logger.error("NegocioException: {}", ex.getMessage());
+        logger.error("NegocioException: {}", ex.getMessage(), ex);
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -24,7 +24,7 @@ public class GlobalHandlerException {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
-        logger.error("Exception: {}", ex.getMessage());
+        logger.error("Exception: {}", ex.getMessage(), ex);
         String messagem = MensagemErro.GENERIC_ERROR.getMensagem();
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(messagem);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

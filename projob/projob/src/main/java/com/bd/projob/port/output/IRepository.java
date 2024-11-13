@@ -16,7 +16,7 @@ public interface IRepository {
 
     void atualizarPessoa(Pessoa pessoa);
 
-    int cadastrarProjeto(Projeto projeto);
+    Integer cadastrarProjeto(Projeto projeto);
 
     boolean verificarProjetoExiste(Integer idProjeto);
 
@@ -32,9 +32,11 @@ public interface IRepository {
 
     List<ResponseProjetoDto> listarProjetos();
 
-    void candidatar(Candidatura build);
+    void candidatar(Candidatura candidatura);
 
     void aceitarCandidato(int codUsuario, Integer idProjeto);
 
     boolean existeTelefone(String telefone);
+
+    boolean verificarEmailExiste(String email);
 }

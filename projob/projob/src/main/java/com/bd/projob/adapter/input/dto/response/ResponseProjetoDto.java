@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ResponseProjetoDto {
-    private int codigoProjeto;
+    private int codProjeto;
     private String titulo;
     private String descricao;
     private double remuneracao;

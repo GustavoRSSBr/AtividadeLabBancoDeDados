@@ -45,7 +45,7 @@ public class Command implements ICommand {
         }
 
         LOGGER.info("Verificando credenciais");
-        if (!passwordEncoder.matches(pessoa.getSenha(), requestLoginDto.getSenha())) {
+        if (!passwordEncoder.matches(requestLoginDto.getSenha(),pessoa.getSenha())) {
             throw new NegocioException(MensagemErro.SENHA_INCORRETA.getMensagem());
         }
 
@@ -61,7 +61,7 @@ public class Command implements ICommand {
         }
 
         LOGGER.info("Validando se existe o telefone");
-        if (!repository.existeTelefone(requestPessoaDto.getTelefone())) {
+        if (repository.existeTelefone(requestPessoaDto.getTelefone())) {
             throw new NegocioException(MensagemErro.TELEFONE_INDISPONIVEL.getMensagem());
         }
 
@@ -70,8 +70,13 @@ public class Command implements ICommand {
             throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
         }
 
+        if (repository.verificarEmailExiste(requestPessoaDto.getEmail())) {
+            throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
+        }
+
+
         LOGGER.info("Validando senha");
-        if (!(requestPessoaDto.getSenha().length() < 8)) {
+        if ((requestPessoaDto.getSenha().length() < 8)) {
             throw new NegocioException(MensagemErro.SENHA_INVALIDA.getMensagem());
         }
 
@@ -109,12 +114,14 @@ public class Command implements ICommand {
             throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
         }
 
+        if (repository.verificarEmailExiste(requestPessoaDto.getEmail())) {
+            throw new NegocioException(MensagemErro.EMAIL_INVALIDO.getMensagem());
+        }
+
         LOGGER.info("Validando senha");
         if (!(requestPessoaDto.getSenha().length() < 8)) {
             throw new NegocioException(MensagemErro.SENHA_INVALIDA.getMensagem());
         }
-
-
 
         LOGGER.info("Criptografando nova senha");
         requestPessoaDto.setSenha(passwordEncoder.encode(requestPessoaDto.getSenha()));
@@ -130,10 +137,14 @@ public class Command implements ICommand {
     }
 
     @Override
-    public int cadastrarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa) {
+    public Integer cadastrarProjeto(RequestProjetoDto requestProjetoDto, Pessoa pessoa) {
         LOGGER.info("Verificando usuario logado");
         if (pessoa == null) {
             throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
+        }
+
+        if(requestProjetoDto.getTitulo().length() > 50){
+            throw new NegocioException(MensagemErro.TITULO_GRANDE.getMensagem());
         }
 
         LOGGER.info("Validando Remuneracao");
@@ -147,7 +158,7 @@ public class Command implements ICommand {
                 .remuneracao(requestProjetoDto.getRemuneracao())
                 .descricao(requestProjetoDto.getDescricao())
                 .codPatroc(pessoa.getCodUsuario())
-                .status_proj(StatusProjeto.ABERTO.getMensagem())
+                .statusProj(StatusProjeto.ABERTO.getMensagem())
                 .build();
 
         LOGGER.info("Persistindo Projeto");
@@ -166,8 +177,12 @@ public class Command implements ICommand {
             throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
         }
 
+        if(requestProjetoDto.getTitulo().length() > 50){
+            throw new NegocioException(MensagemErro.TITULO_GRANDE.getMensagem());
+        }
+
         LOGGER.info("Validando relação do usuario logado com o projeto a ser atualizado");
-        if (repository.verificarRelacaoPessoaProjeto(idProjeto, pessoa.getCodUsuario())) {
+        if (!repository.verificarRelacaoPessoaProjeto(idProjeto, pessoa.getCodUsuario())) {
             throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());
         }
 
@@ -183,7 +198,7 @@ public class Command implements ICommand {
                 .remuneracao(requestProjetoDto.getRemuneracao())
                 .descricao(requestProjetoDto.getDescricao())
                 .codPatroc(pessoa.getCodUsuario())
-                .status_proj(StatusProjeto.ABERTO.getMensagem())
+                .statusProj(StatusProjeto.ABERTO.getMensagem())
                 .build();
 
         LOGGER.info("Atualizando projeto");
@@ -198,7 +213,7 @@ public class Command implements ICommand {
         }
 
         LOGGER.info("Validando relação do usuario logado com o projeto a ser atualizado");
-        if (repository.verificarRelacaoPessoaProjeto(idProjeto, pessoa.getCodUsuario())) {
+        if (!repository.verificarRelacaoPessoaProjeto(idProjeto, pessoa.getCodUsuario())) {
             throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());
         }
 
@@ -253,7 +268,7 @@ public class Command implements ICommand {
         }
 
         LOGGER.info("Vericando se existe relação da pessoa com o projeto");
-        if (repository.verificarRelacaoPessoaProjeto(requestPessoaDto.getIdProjeto(), pessoa.getCodUsuario())) {
+        if (!repository.verificarRelacaoPessoaProjeto(requestPessoaDto.getIdProjeto(), pessoa.getCodUsuario())) {
             throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());
         }
 
@@ -303,6 +318,4 @@ public class Command implements ICommand {
                 .build());
 
     }
-
-
 }

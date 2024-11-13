@@ -39,7 +39,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_CADASTRADA.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_CADASTRADA.getMensagem()).build());
     }
 
     @PostMapping("/login")
@@ -54,7 +54,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_LOGADA.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_LOGADA.getMensagem()).build());
     }
 
     @PostMapping("/atualizar-pessoa")
@@ -69,7 +69,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_ATUALIZADA.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_ATUALIZADA.getMensagem()).build());
     }
 
     @PostMapping("/cadastrar-projeto")
@@ -78,13 +78,13 @@ public class Controller implements IController {
         LOGGER.info("Início do método cadastrarProjeto");
         long startTime = System.currentTimeMillis();
 
-        int idProjeto = command.cadastrarProjeto(requestProjetoDto, pessoa);
+        Integer idProjeto = command.cadastrarProjeto(requestProjetoDto, pessoa);
 
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_CADASTRADO.getMensagem()).dado(idProjeto));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_CADASTRADO.getMensagem()).dado(idProjeto).build());
     }
 
     @PostMapping("/atualizar-projeto/{idProjeto}")
@@ -99,7 +99,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_ATUALIZADO.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_ATUALIZADO.getMensagem()).build());
     }
 
     @DeleteMapping("/deletar-projeto/{idProjeto}")
@@ -114,7 +114,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_DELETADO.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_DELETADO.getMensagem()).build());
     }
 
     @GetMapping("/buscar-projeto/{idProjeto}")
@@ -129,7 +129,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_ENCONTRADO.getMensagem()).dado(projeto));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_ENCONTRADO.getMensagem()).dado(projeto).build());
     }
 
     @GetMapping("/listar-candidatos/{idProjeto}")
@@ -144,7 +144,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.CANDIDATO_ENCONTRADO.getMensagem()).dado(cadidatos));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.CANDIDATO_ENCONTRADO.getMensagem()).dado(cadidatos).build());
     }
 
     @PostMapping("/aceitar-canditado")
@@ -159,7 +159,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.CANDIDATO_ACEITO.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.CANDIDATO_ACEITO.getMensagem()).build());
     }
 
     @GetMapping("/listar-projetos")
@@ -174,7 +174,7 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETOS_ENCONTRADOS.getMensagem()).dado(projetos));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETOS_ENCONTRADOS.getMensagem()).dado(projetos).build());
     }
 
     @PostMapping("/candidatar/{idProjeto}")
@@ -189,6 +189,6 @@ public class Controller implements IController {
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
 
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.CANDIDATURA_REALIZADA.getMensagem()));
+        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.CANDIDATURA_REALIZADA.getMensagem()).build());
     }
 }

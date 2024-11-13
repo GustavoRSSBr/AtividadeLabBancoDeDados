@@ -14,7 +14,8 @@ public enum MensagemErro {
     SEM_CANDIDATURA("Nenhuma pessoa se candidatou a esse projeto ainda!"),
     CANDIDATO_INEXISTENTE("O candidato não existe"),
     SEM_PROJETOS("Não existe projetos cadastrados!"),
-    TELEFONE_INDISPONIVEL("Esse telefone já está cadastrado");
+    TELEFONE_INDISPONIVEL("Esse telefone já está cadastrado"),
+    TITULO_GRANDE("O título ultrapassou a quantidade de caracteres permitidos que é 50.");
 
     private final String mensagem;
 
