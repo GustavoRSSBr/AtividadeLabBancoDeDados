@@ -191,4 +191,32 @@ public class RepositoryDao implements IRepository {
         return existe != null && existe;
     }
 
+    @Override
+    public boolean verificarProjetoAberto(Integer idProjeto) {
+        String sql = """
+                select exists (
+                	select True from projeto
+                	where status_proj = "ABERTO"
+                	and codProjeto = ?
+                ) AS existe;
+                """;
+        Boolean existe = jdbcTemplate.queryForObject(sql, Boolean.class, idProjeto);
+
+        return existe != null && existe;
+    }
+
+    @Override
+    public boolean verificarUsuarioCandidatado(int codUsuario, Integer idProjeto) {
+        String sql = """
+                select exists (
+                	select True from candidatura
+                	where codCandidato = ?
+                	and codProj = ?
+                ) AS existe;""";
+
+        Boolean existe = jdbcTemplate.queryForObject(sql, Boolean.class, codUsuario, idProjeto);
+
+        return existe != null && existe;
+    }
+
 }

@@ -105,7 +105,7 @@ public class Command implements ICommand {
         }
 
         LOGGER.info("Validando se existe o telefone");
-        if (!repository.existeTelefone(requestPessoaDto.getTelefone())) {
+        if (repository.existeTelefone(requestPessoaDto.getTelefone())) {
             throw new NegocioException(MensagemErro.TELEFONE_INDISPONIVEL.getMensagem());
         }
 
@@ -119,7 +119,7 @@ public class Command implements ICommand {
         }
 
         LOGGER.info("Validando senha");
-        if (!(requestPessoaDto.getSenha().length() < 8)) {
+        if ((requestPessoaDto.getSenha().length() < 8)) {
             throw new NegocioException(MensagemErro.SENHA_INVALIDA.getMensagem());
         }
 
@@ -309,6 +309,16 @@ public class Command implements ICommand {
         LOGGER.info("verificar se o projeto existe");
         if (!repository.verificarProjetoExiste(idProjeto)) {
             throw new NegocioException(MensagemErro.PROJETO_INEXISTENTE.getMensagem());
+        }
+
+        LOGGER.info("verificar se o projeto está aberto");
+        if (!repository.verificarProjetoAberto(idProjeto)) {
+            throw new NegocioException(MensagemErro.PROJETO_FECHADO.getMensagem());
+        }
+
+        LOGGER.info("verificar se já está candidatado");
+        if (repository.verificarUsuarioCandidatado(pessoa.getCodUsuario(), idProjeto)) {
+            throw new NegocioException(MensagemErro.USUARIO_JA_CANDIDATADO.getMensagem());
         }
 
         LOGGER.info("persistindo candidatura do usuario");

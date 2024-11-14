@@ -96,6 +96,21 @@ select exists (
 ) AS existe;
 
 
+-- projetoAberto
+select exists (
+	select True from projeto
+	where status_proj = "ABERTO"
+	and codProjeto = 2
+) AS existe;
+
+-- candidaturaExiste
+select exists (
+	select True from candidatura
+	where codCandidato = 1
+	and codProj = 2
+) AS existe;
+
+
 DELIMITER $$
 CREATE PROCEDURE cadastrarProjeto(
     IN titulo_in VARCHAR(50), 

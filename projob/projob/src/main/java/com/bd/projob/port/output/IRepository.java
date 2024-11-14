@@ -39,4 +39,8 @@ public interface IRepository {
     boolean existeTelefone(String telefone);
 
     boolean verificarEmailExiste(String email);
+
+    boolean verificarProjetoAberto(Integer idProjeto);
+
+    boolean verificarUsuarioCandidatado(int codUsuario, Integer idProjeto);
 }

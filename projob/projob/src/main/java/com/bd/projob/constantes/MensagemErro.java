@@ -9,6 +9,8 @@ public enum MensagemErro {
     SENHA_INVALIDA("Senha inválida, ela deve ter 8 ou mais caracteres!"),
     PRECISA_LOGADO("Você precisa estar logado para realizar essa operação!"),
     PROJETO_INEXISTENTE("O projeto não existe"),
+    PROJETO_FECHADO("O projeto está fechado"),
+    USUARIO_JA_CANDIDATADO("O usuário já está candidatado a este projeto"),
     VALOR_MENOR_ZERO("O valor não pode ser menor ou igual a 0"),
     SEM_PERMISSAO_PROJETO("A pessoa logada não tem permissão para acessar esse projeto"),
     SEM_CANDIDATURA("Nenhuma pessoa se candidatou a esse projeto ainda!"),
