@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Projeto</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <button class="tab-button active">Meu Projeto</button>
+            <a href="projetos_plataforma.html" class="tab-button">Projetos da Plataforma</a>
+        </nav>
+
+        <form action="/cadastrar_projeto" method="POST">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" required>
+
+            <label for="remuneracao">Remuneração:</label>
+            <input type="number" id="remuneracao" name="remuneracao" required>
+
+            <button type="submit" class="button">Cadastrar Projeto</button>
+        </form>
+
+        <form action="/buscar_projeto" method="POST">
+            <label for="id_projeto">ID do Projeto:</label>
+            <input type="number" id="id_projeto" name="id_projeto">
+        
+            <div class="form-buttons-container">
+                <button type="submit" class="button">Buscar</button>
+                <button type="button" class="button">Atualizar</button>
+                <button type="button" class="button">Deletar</button>
+            </div>
+        </form>
+        
+
+        <button class="button">Listar Candidatos do Projeto</button>
+
+        <div class="candidates-list">
+            <p>Email: candidato@email.com | Nome: João da Silva | Telefone: 20434442</p>
+        </div>
+
+        <button class="button">Aceitar Candidato</button>
+        <a href="index.html" class="button">Voltar para Tela de Login</a>
+    </div>
+</body>
+</html>
