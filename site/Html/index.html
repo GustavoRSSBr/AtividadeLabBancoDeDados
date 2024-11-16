@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela Login</title>
     <link rel="stylesheet" href="../css/style.css"> 
+    <script src="../pasta.js/index.js" ></script>
 </head>
 <body>
     <div class="container">
         <h2 class="titulo">Tela Login</h2>
-        <form action="/login" method="POST">
+        <form action="submit" onsubmit="login(event)">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
