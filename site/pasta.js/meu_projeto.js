@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const idProjeto = form.id_projeto.value;
 
         try {
-            const response = await fetch(`http://localhost:8080/buscar-projeto?id=${idProjeto}`, {
+            const response = await fetch(`http://localhost:8080/buscar-projeto/${idProjeto}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/atualizar-projeto', {
+            const response = await fetch(`http://localhost:8080/atualizar-projeto/${idProjeto}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const idProjeto = document.getElementById('id_projeto').value;
 
         try {
-            const response = await fetch(`http://localhost:8080/deletar-projeto?id=${idProjeto}`, {
+            const response = await fetch(`http://localhost:8080/deletar-projeto/${idProjeto}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,9 +123,74 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+// Função para Listar Candidatos projeto
+        const listarCandidato = async (e) => {
+            e.preventDefault();
+    
+            const idProjeto = document.getElementById('id_projeto').value;
+    
+            try {
+                const response = await fetch(`http://localhost:8080/listar-candidatos/${idProjeto}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Erro ao buscar projeto: ${response.status}`);
+                }
+        
+                const data = await response.json();
+
+
+                // Exibir os detalhes do projeto
+
+                const projectDetails = document.querySelector(".candidates-list");
+                data.dado.forEach((projeto) => {
+                    console.log(projeto)
+                    projectDetails.innerHTML = `
+                    <p>Nome:${projeto.nome}</p>
+                    <p>Email:${projeto.email}</p>
+                    <p>Telefone:${projeto.telefone}</p>
+                    <button onclick="aceitarCandidato(${projeto.codProjeto})">Aceitar Candidato</button>`;
+                });
+
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                alert('Ocorreu um erro ao listar candidatos.');
+            }
+        };
+
+
     // Adicionar event listeners aos formulários e botões
     document.getElementById('formProjeto').addEventListener('submit', cadastrarProjeto);
     document.getElementById('buscarProjetoForm').addEventListener('submit', buscarProjeto);
     document.getElementById('atualizarProjetoButton').addEventListener('click', atualizarProjeto);
     document.getElementById('deletarProjetoButton').addEventListener('click', deletarProjeto);
+    document.getElementById('listarCandidatoButton').addEventListener('click', listarCandidato);
 });
+
+        // Função para Aceitar um candidato
+        async function aceitarCandidato(idProjeto) {
+            console.log(idProjeto)
+            try {
+                const response = await fetch(`http://localhost:8080/aceitar-canditado/${idProjeto}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`Erro ao aceitar Candidato: ${response.status}`);
+                }
+        
+                const data = await response.json();
+                console.log(data);
+                alert(data.mensagem);
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao realizar a candidatura.");
+            }
+        }

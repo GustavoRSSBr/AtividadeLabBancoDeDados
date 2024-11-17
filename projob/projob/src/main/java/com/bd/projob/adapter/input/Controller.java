@@ -88,7 +88,7 @@ public class Controller implements IController {
         return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PROJETO_CADASTRADO.getMensagem()).dado(idProjeto).build());
     }
 
-    @PostMapping("/atualizar-projeto/{idProjeto}")
+    @PutMapping("/atualizar-projeto/{idProjeto}")
     @Override
     public ResponseEntity<?> atualizarProjeto(@RequestBody RequestProjetoDto requestProjetoDto, @PathVariable Integer idProjeto) {
         LOGGER.info("Início do método atualizarProjeto");
