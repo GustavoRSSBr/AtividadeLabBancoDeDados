@@ -13,6 +13,7 @@ import com.bd.projob.port.input.ICommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class Controller implements IController {
 
     @PostMapping("/cadastrar-pessoa")
     @Override
-    public ResponseEntity<?> cadastrarPessoa(@RequestBody RequestPessoaDto requestPessoaDto) {
+    public ResponseEntity<ResponseDto> cadastrarPessoa(@RequestBody RequestPessoaDto requestPessoaDto) {
         LOGGER.info("Início do método cadastrarPessoa");
         long startTime = System.currentTimeMillis();
 
@@ -38,8 +39,8 @@ public class Controller implements IController {
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
         LOGGER.info("Tempo decorrido: " + elapsedTime + " milissegundos");
-
-        return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_CADASTRADA.getMensagem()).build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_CADASTRADA.getMensagem()).build());
+    //    return ResponseEntity.ok(ResponseDto.builder().mensagem(MensagemSucesso.PESSOA_CADASTRADA.getMensagem()).build());
     }
 
     @PostMapping("/login")

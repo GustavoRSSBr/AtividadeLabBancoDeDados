@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ErrorResponseDTO {
-    private String messagem;
+    private String mensagem;
 }
