@@ -266,7 +266,7 @@ public class Command implements ICommand {
         if (pessoa == null) {
             throw new NegocioException(MensagemErro.PRECISA_LOGADO.getMensagem());
         }
-
+        System.out.println(requestPessoaDto + "///" + pessoa);
         LOGGER.info("Vericando se existe relação da pessoa com o projeto");
         if (!repository.verificarRelacaoPessoaProjeto(requestPessoaDto.getIdProjeto(), pessoa.getCodUsuario())) {
             throw new NegocioException(MensagemErro.SEM_PERMISSAO_PROJETO.getMensagem());

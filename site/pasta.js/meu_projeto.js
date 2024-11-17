@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>Nome:${projeto.nome}</p>
                     <p>Email:${projeto.email}</p>
                     <p>Telefone:${projeto.telefone}</p>
-                    <button onclick="aceitarCandidato(${projeto.codProjeto})">Aceitar Candidato</button>`;
+                    <button onclick='aceitarCandidato("${projeto.email}",${idProjeto})'>Aceitar Candidato</button>`;
                 });
 
             } catch (error) {
@@ -172,14 +172,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
         // Função para Aceitar um candidato
-        async function aceitarCandidato(idProjeto) {
-            console.log(idProjeto)
+        async function aceitarCandidato(email,idProjeto) {
+            const body={
+                emailPessoa:email,
+                idProjeto:idProjeto,
+            }
             try {
-                const response = await fetch(`http://localhost:8080/aceitar-canditado/${idProjeto}`, {
+                const response = await fetch(`http://localhost:8080/aceitar-canditado`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    body:JSON.stringify(body)
                 });
         
                 if (!response.ok) {
