@@ -116,16 +116,17 @@ public class RepositoryDao implements IRepository {
     @Override
     public ResponseProjetoDto buscarProjetoId(Integer idProjeto) {
         String sql = """
-            SELECT p.codProjeto, p.titulo, p.descricao, p.remuneracao,
-            u.email AS emailPatrocinador, p.status_proj AS statusProjeto
-            FROM projeto p
-            INNER JOIN usuario u ON p.codPatroc = u.codUsuario
-            WHERE p.codProjeto = ?""";
-
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ResponseProjetoDto.class), idProjeto);
+                SELECT p.codProjeto, p.titulo, p.descricao, p.remuneracao,
+                u.email AS emailPatrocinador, p.status_proj AS statusProjeto
+                FROM projeto p
+                INNER JOIN usuario u ON p.codPatroc = u.codUsuario
+                WHERE p.codProjeto = ?""";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ResponseProjetoDto.class), idProjeto);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
-
-
     @Override
     public List<ResponsePessoaDto> listarPessoasCandidatadas(Integer idProjeto) {
         String sql = """
