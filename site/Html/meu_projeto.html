@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Projeto</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Adicione o link para o arquivo JS aqui -->
+    <script src="../pasta.js/meu_projeto.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -12,36 +14,37 @@
             <button class="tab-button active">Meu Projeto</button>
             <a href="projetos_plataforma.html" class="tab-button">Projetos da Plataforma</a>
         </nav>
-
-        <form action="/cadastrar_projeto" method="POST">
+        
+        <!-- Formulário para cadastrar projeto -->
+        <form id="formProjeto">
             <label for="titulo">Título:</label>
             <input type="text" id="titulo" name="titulo" required>
-
+        
             <label for="descricao">Descrição:</label>
             <input type="text" id="descricao" name="descricao" required>
-
+        
             <label for="remuneracao">Remuneração:</label>
             <input type="number" id="remuneracao" name="remuneracao" required>
-
+        
             <button type="submit" class="button">Cadastrar Projeto</button>
         </form>
 
-        <form action="/buscar_projeto" method="POST">
+        <!-- Formulário para buscar projeto -->
+        <form id="buscarProjetoForm">
             <label for="id_projeto">ID do Projeto:</label>
-            <input type="number" id="id_projeto" name="id_projeto">
-        
+            <input type="number" id="id_projeto" name="id_projeto" required>
+
             <div class="form-buttons-container">
                 <button type="submit" class="button">Buscar</button>
-                <button type="button" class="button">Atualizar</button>
-                <button type="button" class="button">Deletar</button>
+                <button type="button" class="button" id="atualizarProjetoButton">Atualizar</button>
+                <button type="button" class="button" id="deletarProjetoButton">Deletar</button>
             </div>
         </form>
-        
 
         <button class="button">Listar Candidatos do Projeto</button>
 
         <div class="candidates-list">
-            <p>Email: candidato@email.com | Nome: João da Silva | Telefone: 20434442</p>
+            <p></p>
         </div>
 
         <button class="button">Aceitar Candidato</button>
@@ -49,3 +52,4 @@
     </div>
 </body>
 </html>
+
