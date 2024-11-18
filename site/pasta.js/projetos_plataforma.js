@@ -9,7 +9,9 @@ async function listarProjetos() {
         });
 
         if (!response.ok) {
-            throw new Error(`Erro ao listar projetos: ${response.status}`);
+            // Lê a mensagem de erro retornada pelo backend
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.mensagem || 'Erro ao listar todos os projetos');
         }
 
         const data = await response.json();
@@ -30,8 +32,8 @@ async function listarProjetos() {
             projectsList.appendChild(projectItem);
         });
     } catch (error) {
-        console.error(error);
-        alert("Erro ao carregar a lista de projetos.");
+        console.error('Erro ao listar todos os projetos:', error);
+        alert(error.message); // Exibe a mensagem de erro para o usuário
     }
 }
 
@@ -46,15 +48,16 @@ async function candidatarProjeto(idProjeto) {
         });
 
         if (!response.ok) {
-            throw new Error(`Erro ao se candidatar: ${response.status}`);
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.mensagem || 'Erro ao se candidatar a um projeto');
         }
 
         const data = await response.json();
         console.log(data);
         alert(data.mensagem);
     } catch (error) {
-        console.error(error);
-        alert("Erro ao realizar a candidatura.");
+        console.error('Erro ao se candidatar a um projeto:', error);
+        alert(error.message); // Exibe a mensagem de erro para o usuário
     }
 }
 
@@ -70,7 +73,8 @@ async function buscarProjeto(idProjeto) {
         });
 
         if (!response.ok) {
-            throw new Error(`Erro ao buscar projeto: ${response.status}`);
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.mensagem || 'Erro ao buscar os detalhes de um projeto específico:');
         }
 
         const data = await response.json();
@@ -86,8 +90,8 @@ async function buscarProjeto(idProjeto) {
             <p>Status: <strong>${data.dado.statusProjeto} </strong></p>
             <button onclick="candidatarProjeto(${data.dado.codProjeto})">Se Candidatar</button>`;
     } catch (error) {
-        console.error(error);
-        alert("Erro ao carregar os detalhes do projeto.");
+        console.error('Erro ao buscar os detalhes de um projeto específico:', error);
+        alert(error.message); // Exibe a mensagem de erro para o usuário
     }
 }
 

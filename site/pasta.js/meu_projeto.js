@@ -2,18 +2,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Função para cadastrar projeto
     const cadastrarProjeto = async (e) => {
         e.preventDefault();
-
+    
         const form = e.target;
         const titulo = form.titulo.value;
         const descricao = form.descricao.value;
         const remuneracao = form.remuneracao.value;
-
+    
         const novoProjeto = {
             titulo: titulo,
             descricao: descricao,
             remuneracao: remuneracao
         };
-
+    
         try {
             const response = await fetch('http://localhost:8080/cadastrar-projeto', {
                 method: 'POST',
@@ -22,18 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify(novoProjeto),
             });
-
+    
             if (response.ok) {
-                alert('Projeto cadastrado com sucesso!');
-                form.reset(); // Limpar o formulário
+                const data = await response.json();
+    
+                // Atualiza o campo de ID com o dado retornado pelo backend
+                document.getElementById('id_projeto').value = data.dado;
+    
+                alert(data.mensagem || 'Projeto cadastrado com sucesso!');
+                form.reset(); // Limpa o formulário
             } else {
-                alert('Erro ao cadastrar o projeto.');
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.mensagem || 'Erro ao cadastrar projeto');
             }
         } catch (error) {
-            console.error('Erro na requisição:', error);
-            alert('Ocorreu um erro ao cadastrar o projeto.');
+            console.error('Erro ao cadastrar projeto', error);
+            alert(error.message); // Exibe a mensagem de erro para o usuário
         }
     };
+    
 
     // Função para buscar projeto
     const buscarProjeto = async (e) => {
@@ -54,11 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const projeto = await response.json();
                 alert('Projeto encontrado: ' + JSON.stringify(projeto, null, 2));
             } else {
-                alert('Projeto não encontrado.');
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.mensagem || 'Erro ao buscar projeto');
             }
         } catch (error) {
-            console.error('Erro na requisição:', error);
-            alert('Ocorreu um erro ao buscar o projeto.');
+            console.error('Erro ao buscar projeto:', error);
+            alert(error.message); // Exibe a mensagem de erro para o usuário
         }
     };
 
@@ -90,11 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 alert('Projeto atualizado com sucesso!');
             } else {
-                alert('Erro ao atualizar o projeto.');
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.mensagem || 'Erro ao atualizar projeto');
             }
         } catch (error) {
-            console.error('Erro na requisição:', error);
-            alert('Ocorreu um erro ao atualizar o projeto.');
+            console.error('Erro ao atualizar projeto:', error);
+            alert(error.message); // Exibe a mensagem de erro para o usuário
         }
     };
 
@@ -115,11 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 alert('Projeto deletado com sucesso!');
             } else {
-                alert('Erro ao deletar o projeto.');
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.mensagem || 'Erro ao deletar projeto');
             }
         } catch (error) {
-            console.error('Erro na requisição:', error);
-            alert('Ocorreu um erro ao deletar o projeto.');
+            console.error('Erro ao deletar:', error);
+            alert(error.message); // Exibe a mensagem de erro para o usuário
         }
     };
 
@@ -138,7 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
     
                 if (!response.ok) {
-                    throw new Error(`Erro ao buscar projeto: ${response.status}`);
+            // Lê a mensagem de erro retornada pelo backend
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.mensagem || 'Erro ao Listar Candidatos projeto:');
                 }
         
                 const data = await response.json();
@@ -157,8 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
             } catch (error) {
-                console.error('Erro na requisição:', error);
-                alert('Ocorreu um erro ao listar candidatos.');
+                console.error('Erro ao Listar Candidatos projeto:', error);
+                alert(error.message); // Exibe a mensagem de erro para o usuário
             }
         };
 
@@ -187,14 +199,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         
                 if (!response.ok) {
-                    throw new Error(`Erro ao aceitar Candidato: ${response.status}`);
+                    const errorResponse = await response.json();
+                    throw new Error(errorResponse.mensagem || 'Erro ao aceitar candidato');
                 }
         
                 const data = await response.json();
                 console.log(data);
                 alert(data.mensagem);
             } catch (error) {
-                console.error(error);
-                alert("Erro ao realizar a candidatura.");
+                console.error('Erro ao realizar candidatura:', error);
+                alert(error.message);
             }
         }
