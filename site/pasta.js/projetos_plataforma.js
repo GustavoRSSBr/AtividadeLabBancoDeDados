@@ -81,15 +81,20 @@ async function buscarProjeto(idProjeto) {
         console.log(data);
 
         // Exibir os detalhes do projeto
-        const projectDetails = document.querySelector(".project-details");
-        projectDetails.innerHTML = `
-            <h3>${data.dado.titulo}</h3>
-            <p><strong>ID:</strong> ${data.dado.codProjeto}</p>
-            <p><strong>Descrição:</strong> ${data.dado.descricao}</p>
-            <p><strong>Remuneração:</strong> R$ ${data.dado.remuneracao}</p>
-            <p><strong>Email Patrocinador:</strong> ${data.dado.emailPatrocinador}</p>
-            <p><strong>Status:</strong> ${data.dado.statusProjeto} </p>
-            <button  class="button button-cadastrar"  onclick="candidatarProjeto(${data.dado.codProjeto})">Se Candidatar</button>`;
+       // Exibir os detalhes do projeto
+const projectDetails = document.querySelector(".project-details");
+projectDetails.innerHTML = `
+    <h3>${data.dado.titulo}</h3>
+    <p><strong>ID:</strong> ${data.dado.codProjeto}</p>
+    <p><strong>Descrição:</strong> ${data.dado.descricao}</p>
+    <p><strong>Remuneração:</strong> R$ ${data.dado.remuneracao}</p>
+    <p><strong>Email Patrocinador:</strong> ${data.dado.emailPatrocinador}</p>
+    <p><strong>Email Candidato:</strong> 
+        ${data.dado.emailCandidato ? data.dado.emailCandidato : "Candidatura aberta"}
+    </p>
+    <p><strong>Status:</strong> ${data.dado.statusProjeto} </p>
+    <button  class="button button-cadastrar"  onclick="candidatarProjeto(${data.dado.codProjeto})">Se Candidatar</button>`;
+
     } catch (error) {
         console.error('Erro ao buscar os detalhes de um projeto específico:', error);
         alert(error.message); // Exibe a mensagem de erro para o usuário
