@@ -27,7 +27,7 @@ async function listarProjetos() {
             projectItem.className = "project-item";
             projectItem.innerHTML = `
                 <h3>${projeto.titulo}</h3>
-                <button onclick="buscarProjeto(${projeto.codProjeto})">Exibir Detalhe</button>
+                <button class="button btn-detalhes" onclick="buscarProjeto(${projeto.codProjeto})">Exibir Detalhe</button>
             `;
             projectsList.appendChild(projectItem);
         });
@@ -84,11 +84,12 @@ async function buscarProjeto(idProjeto) {
         const projectDetails = document.querySelector(".project-details");
         projectDetails.innerHTML = `
             <h3>${data.dado.titulo}</h3>
-            <p>${data.dado.descricao}</p>
-            <p>Remuneração: R$ ${data.dado.remuneracao}</p>
-            <p>emailPatrocinador: ${data.dado.emailPatrocinador}</p>
-            <p>Status: <strong>${data.dado.statusProjeto} </strong></p>
-            <button onclick="candidatarProjeto(${data.dado.codProjeto})">Se Candidatar</button>`;
+            <p><strong>ID:</strong> ${data.dado.codProjeto}</p>
+            <p><strong>Descrição:</strong> ${data.dado.descricao}</p>
+            <p><strong>Remuneração:</strong> R$ ${data.dado.remuneracao}</p>
+            <p><strong>Email Patrocinador:</strong> ${data.dado.emailPatrocinador}</p>
+            <p><strong>Status:</strong> ${data.dado.statusProjeto} </p>
+            <button  class="button button-cadastrar"  onclick="candidatarProjeto(${data.dado.codProjeto})">Se Candidatar</button>`;
     } catch (error) {
         console.error('Erro ao buscar os detalhes de um projeto específico:', error);
         alert(error.message); // Exibe a mensagem de erro para o usuário

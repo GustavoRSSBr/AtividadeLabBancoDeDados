@@ -123,6 +123,52 @@ form input[type="number"] {
     background-color: #0069d9;
 }
 
+.btn-detalhes {
+    background-color: #007bff; /* Cor de fundo azul */
+    color: white; /* Texto branco */
+    border: none; /* Remover bordas padrão */
+    border-radius: 3px; /* Bordas arredondadas menores */
+    padding: 3px 8px; /* Reduzir espaçamento interno */
+    font-size: 12px; /* Reduzir tamanho da fonte */
+    cursor: pointer; /* Mostrar o cursor de mão */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+    transition: all 0.3s ease; /* Suavizar efeitos */
+}
+
+.btn-detalhes:hover {
+    background-color: #0056b3; /* Cor mais escura ao passar o mouse */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Aumentar ligeiramente a sombra */
+    transform: scale(1.03); /* Aumentar um pouco no hover */
+}
+
+.btn-detalhes:active {
+    background-color: #003f7f; /* Cor ao clicar */
+    transform: scale(0.97); /* Reduzir ligeiramente no clique */
+}
+
+.btn-aceitarCandidato {
+    background-color: #28a745; /* Cor verde */
+    color: white; /* Texto branco */
+    border: none; /* Remover bordas padrão */
+    border-radius: 3px; /* Bordas levemente arredondadas */
+    padding: 3px 8px; /* Ajuste de altura e largura */
+    font-size: 12px; /* Tamanho da fonte compacto */
+    cursor: pointer; /* Mostrar o cursor de mão */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    transition: all 0.3s ease; /* Suavizar efeitos */
+    display: inline-block; /* Garante alinhamento ao conteúdo */
+}
+
+.btn-aceitarCandidato:hover {
+    background-color: #218838; /* Cor verde mais escura ao passar o mouse */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Aumentar ligeiramente a sombra */
+}
+
+.btn-aceitarCandidato:active {
+    background-color: #1e7e34; /* Cor ao clicar */
+    transform: scale(0.97); /* Reduzir ligeiramente no clique */
+}
+
 /* Estilos para as listas de projetos e candidatos */
 .projects-list,
 .candidates-list {

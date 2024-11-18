@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>Nome:${projeto.nome}</p>
                     <p>Email:${projeto.email}</p>
                     <p>Telefone:${projeto.telefone}</p>
-                    <button onclick='aceitarCandidato("${projeto.email}",${idProjeto})'>Aceitar Candidato</button>`;
+                    <button class="btn-aceitarCandidato" onclick='aceitarCandidato("${projeto.email}",${idProjeto})'>Aceitar Candidato</button>`;
                 });
 
             } catch (error) {
