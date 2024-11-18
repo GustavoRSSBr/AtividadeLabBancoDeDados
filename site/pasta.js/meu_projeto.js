@@ -155,17 +155,24 @@ document.addEventListener("DOMContentLoaded", () => {
         
                 const data = await response.json();
 
+                // Exibir os projetos na página
+                const candidatesList = document.querySelector(".candidates-list");
+                candidatesList.innerHTML = ""; // Limpa a lista antes de exibir
 
                 // Exibir os detalhes do projeto
 
-                const projectDetails = document.querySelector(".candidates-list");
                 data.dado.forEach((projeto) => {
                     console.log(projeto)
-                    projectDetails.innerHTML = `
+                    const candidateDetails = document.createElement("div");
+                    candidateDetails.className = "candidate-item";
+                    candidateDetails.innerHTML = `
                     <p>Nome:${projeto.nome}</p>
                     <p>Email:${projeto.email}</p>
                     <p>Telefone:${projeto.telefone}</p>
-                    <button class="btn-aceitarCandidato" onclick='aceitarCandidato("${projeto.email}",${idProjeto})'>Aceitar Candidato</button>`;
+                    <button class="btn-aceitarCandidato" onclick='aceitarCandidato("${projeto.email}",${idProjeto})'>Aceitar Candidato</button>
+                    <br>`;
+
+                    candidatesList.appendChild(candidateDetails);
                 });
 
             } catch (error) {
